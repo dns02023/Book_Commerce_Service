@@ -2,6 +2,8 @@ package jpabook.jpashop.repository;
 
 
 import jpabook.jpashop.domain.Member;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -10,11 +12,24 @@ import java.util.List;
 
 // component scan에 의해 spring bean으로 자동 관리
 @Repository
+@RequiredArgsConstructor
 public class MemberRepository {
 
-    // 이 어노테이션에 의해 spring이 em을 만들어서 주입해준다.
-    @PersistenceContext
-    private EntityManager em;
+    // entity manager 주입 두가지 방법 : persist context 어노테이션 / 생성자 주입
+
+//    // 이 어노테이션에 의해 spring이 em을 만들어서 주입해준다.
+//    @PersistenceContext
+//    private EntityManager em;
+
+    // 스프링 부트에서는 jpa를 사용할 때 이런식으로 entity manager를 autowired로 주입해줄 수도 있다.(스프링 부트와 스프링 데이터 jpa하에서 가능)
+    // 원래는 PersistenceContext 어노테이션 처리 해주는 게 원칙
+    // @Autowired // 생략
+    private final EntityManager em;
+
+    // lombok 으로 생략 가능
+//    public MemberRepository(EntityManager em) {
+//        this.em = em;
+//    }
 
     public void save(Member member){
         em.persist(member);
