@@ -10,14 +10,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-// component scan => spring bean
-@Service
+
+
 // JPA의 데이터 변경과 로직들은 반드시 트랜잭션 내에서 실행되어야 함
 // 조회 관련 메서드들이 대부분 이므로 readOnly를 설정해주지만, 가입과 같은 쓰기 메서드는 readOnly를 쓰면 안됨
 // => 해당 메서드에 따로 트랜잭션 어노테이션을 넣어준다.
-@Transactional(readOnly = true)
 // @AllArgsConstructor // 이 어노테이션을 통해서 모든 필드값 설정하는 생성자 선언을 자동으로 해준다.(LOMBOK)
 // @RequiredArgsConstructor // final 인 필드값들만 설정하는 생성자 선언
+@Service
+@Transactional(readOnly = true)
 public class MemberService {
     // 트랜잭션 어노테이션에 의해 public method들(가입, 조회 등)은 트랜잭션에 걸림
 
