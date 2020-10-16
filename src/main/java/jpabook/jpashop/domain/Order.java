@@ -14,7 +14,8 @@ import java.util.List;
 @Getter @Setter
 public class Order {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "order_id")
     private Long id;
 
@@ -49,24 +50,60 @@ public class Order {
 
     //양방향 연관관계 편의 메서드 : 양방향 연관관계 상황에서는 둘중 좀더 핵심적인 역할을 하는 클래스에 구현해주는 것이 좋음
     //jpa, db상의 연관관계 말고도 객체 사이의 연관관계를 설정을 해줘야 함
-    public void setMember(Member member){
+    public void setMember(Member member) {
         this.member = member;
         member.getOrders().add(this);
         // 자바 연습할 때 했던 것 처럼 객체간 협력을 구현 => 양방향 연관관계 설정
         // setMember만 호출하면 Member에서의 order 추가도 자동으로 호출됨
     }
 
-    public void addOrderItem(OrderItem orderItem){
+    public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);
         // order <-> orderitem 도 마찬가지로 양방향 연관관계를 코드 내에서 설정해줘야 함
     }
 
-    public void setDelivery(Delivery delivery){
+    public void setDelivery(Delivery delivery) {
         this.delivery = delivery;
         delivery.setOrder(this);
     }
 
+    // 생성 메서드
+    // order를 생성할 때 복잡한 연관관계가 생성된다. => 별도의 생성 메서드로 처리
+    public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+        // order 생성과 관련된 수정은 이 메서드만 수정하면 된다.
+        Order order = new Order();
+
+        // order 전체 연관관계 설정
+        order.setMember(member);
+        order.setDelivery(delivery);
+        for (OrderItem orderItem : orderItems) {
+            order.addOrderItem(orderItem);
+        }
+        // 상태, 날짜 설정
+        order.setStatus(OrderStatus.ORDER);
+        order.setOrderDate(LocalDateTime.now());
+        return order;
+    }
+
+    // 주문 비즈니스 로직을 역시 주문 엔티티 안에 구현
+    public void cancel(){
+        if(delivery.getStatus() == DeliveryStatus.COMP){
+            // 배송이 이미 완료되버리면 취소 못함
+            throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
+        }
+        // 주문 상태 변경
+        this.setStatus(OrderStatus.CANCEL);
+        // 주문을 취소했으므로, 주문에 담겨있던 상품들 재고 회복
+        for(OrderItem orderItem : this.orderItems){
+            // order 에 포함되는 하위의 orderitem 객체들을 모두 각각 cancel() 해준다.
+            orderItem.cancel();
+        }
+
+    }
+
+
 
 
 }
+

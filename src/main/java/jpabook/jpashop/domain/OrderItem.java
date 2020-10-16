@@ -28,4 +28,13 @@ public class OrderItem {
 
     private int orderPrice; //주문 가격
     private int count; // 주문 수량
+
+    // Order와 연계되는 비즈니스 로직
+    public void cancel() {
+        // 이 주문아이템의 해당 item의 재고 수량을 회복시켜준다.
+        // this.getItem().addStock(count);
+        getItem().addStock(count);
+        // this 앞에 안써도 되는 건가???
+
+    }
 }
