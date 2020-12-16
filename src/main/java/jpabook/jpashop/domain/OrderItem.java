@@ -37,4 +37,8 @@ public class OrderItem {
         // this 앞에 안써도 되는 건가???
 
     }
+
+    public int getTotalPrice() {
+        return getOrderPrice() * getCount();
+    }
 }

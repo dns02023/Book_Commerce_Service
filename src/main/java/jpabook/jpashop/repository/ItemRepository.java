@@ -18,7 +18,7 @@ public class ItemRepository {
         if(item.getId() == null){
             em.persist(item);
             // 새롭게 생성된 객체는 jpa에 저장하기 전까지는 id값이 존재하지 않으므로
-            // id값이 null => persist 수행
+            // id값이 null => persist 수행 (신규 등록)
         }
         else{
             em.merge(item);

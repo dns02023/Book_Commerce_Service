@@ -32,7 +32,7 @@ public abstract class Item {
     // 다대다 관계에서 연관관계의 주인은 카테고리로 한건가?
     @ManyToMany(mappedBy = "items")
     private List<Category> categories = new ArrayList<>();
-
+    // 도메인 주도 설계 (데이터를 가지고 있는 도메인에서 비즈니스 로직을 구현하는게 객체지향적으로 좋음)
     // 비즈니스 로직을 엔티티에 직접 구현!!
     // 재고 수량 증가
     // 만약 서비스 계층에서 아이템 관련 비즈니스 로직을 처리한다고 가정해보면,

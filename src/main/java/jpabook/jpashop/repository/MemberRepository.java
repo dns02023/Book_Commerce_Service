@@ -26,7 +26,7 @@ public class MemberRepository {
     // @Autowired // 생략
     private final EntityManager em;
 
-    // lombok 으로 생략 가능
+//    // lombok 으로 생략 가능: RequiredArgsConstructor => final 자동 생성
 //    public MemberRepository(EntityManager em) {
 //        this.em = em;
 //    }

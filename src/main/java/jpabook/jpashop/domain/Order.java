@@ -102,6 +102,18 @@ public class Order {
 
     }
 
+    // 조회 로직
+    // 전체 주문가격 조회
+    public int getTotalPrice() {
+        // orderItem 객체들의 가격을 다 더하면 된다.
+        int totalPrice = 0;
+        for (OrderItem orderItem : orderItems){
+            // orderItem의 total price => 주문 가격과 수량이 있으므로,
+            totalPrice += orderItem.getTotalPrice();
+        }
+        return totalPrice;
+    }
+
 
 
 
