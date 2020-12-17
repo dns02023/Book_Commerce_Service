@@ -47,6 +47,9 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private OrderStatus status; //주문상태 [ORDER, CANCEL]
 
+    // static 생성 메서드가 아닌 그냥 생성자로 객체를 생성하는 것을 방지 => 응집도 강화
+    protected Order() {
+    }
 
     //양방향 연관관계 편의 메서드 : 양방향 연관관계 상황에서는 둘중 좀더 핵심적인 역할을 하는 클래스에 구현해주는 것이 좋음
     //jpa, db상의 연관관계 말고도 객체 사이의 연관관계를 설정을 해줘야 함
@@ -74,6 +77,7 @@ public class Order {
     // order를 생성할 때 복잡한 연관관계가 생성된다. => 별도의 생성 메서드로 처리
 
     // 왜 static? => 하나의 특정 Order 객체 생성(new) 이전에 호출되야 하므로. + Order 클래스의 시작이라고 할 수 있음
+    // OrderItem은 가변인자로 받기 (...)
     public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
         // order 생성과 관련된 수정은 이 메서드만 수정하면 된다.
         // Order 타입 객체 생성을 이 메서드 안에서 수행 => static
