@@ -29,6 +29,20 @@ public class OrderItem {
     private int orderPrice; //주문 가격
     private int count; // 주문 수량
 
+    // orderItem 생성 메서드
+    public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+        OrderItem orderItem = new OrderItem();
+        // 연관관계 설정
+        orderItem.setItem(item);
+        orderItem.setOrderPrice(orderPrice);
+        orderItem.setCount(count);
+
+        // 비즈니스 로직 처리
+        // 주문했으니까 해당 상품의 재고 제거
+       item.removeStock(count);
+       return orderItem;
+    }
+
     // Order와 연계되는 비즈니스 로직
     public void cancel() {
         // 이 주문아이템의 해당 item의 재고 수량을 회복시켜준다.
@@ -38,6 +52,7 @@ public class OrderItem {
 
     }
 
+    // 가격 조회 로직
     public int getTotalPrice() {
         return getOrderPrice() * getCount();
     }

@@ -69,14 +69,21 @@ public class Order {
     }
 
     // 생성 메서드
+    // Order 객체를 생성할 때, setter를 써서 연관관계(필드)를 설정하는 게 아니라,
+    // 객체 생성할 때 무조건 createOrder()를 호출해서 연관관계(필드)를 모두 설정
     // order를 생성할 때 복잡한 연관관계가 생성된다. => 별도의 생성 메서드로 처리
+
+    // 왜 static? => 하나의 특정 Order 객체 생성(new) 이전에 호출되야 하므로. + Order 클래스의 시작이라고 할 수 있음
     public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
         // order 생성과 관련된 수정은 이 메서드만 수정하면 된다.
+        // Order 타입 객체 생성을 이 메서드 안에서 수행 => static
         Order order = new Order();
 
         // order 전체 연관관계 설정
+        // 필요한 메서드들(setter) 호출
         order.setMember(member);
         order.setDelivery(delivery);
+        // 재고에 대한 비즈니스 로직 처리는? => 이미 인자로 넘어온 orderItem 생성 단계에서 수행했음 (createOrderItem())
         for (OrderItem orderItem : orderItems) {
             order.addOrderItem(orderItem);
         }
@@ -112,6 +119,12 @@ public class Order {
             totalPrice += orderItem.getTotalPrice();
         }
         return totalPrice;
+
+        // 똑같은 로직
+//        return orderItems.stream()
+//                .mapToInt(OrderItem::getTotalPrice)
+//                .sum();
+
     }
 
 
