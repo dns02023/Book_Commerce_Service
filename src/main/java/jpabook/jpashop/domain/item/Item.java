@@ -17,7 +17,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
 @Getter
-//@Setter // setter로 item의 필드를 수정하지 말고, 핵심 비즈니스 로직을 통해서 수정하자.
+@Setter // setter로 item의 필드를 수정하지 말고, 핵심 비즈니스 로직을 통해서 수정하자. 단 테스트시에는 사용
 public abstract class Item {
 
     @Id @GeneratedValue
