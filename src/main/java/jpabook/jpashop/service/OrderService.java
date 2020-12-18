@@ -16,12 +16,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OrderService {
+    // 도메인 모델 패턴으로 설계 (교재 참고)
+    // 엔티티에서 이미 설계된 비즈니스 로직들을 서비스에서 사용한다
+    // 서비스는 단순히 레포지토리를 통해 엔티티 가져오고, 엔티티의 비즈니스 로직을 호출하는 역할만 한다.
 
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
     private final ItemRepository itemRepository;
 
-    // 주문
+    // 주문하기
     @Transactional
     public Long order(Long memberId, Long itemId, int count){
 
@@ -34,9 +37,13 @@ public class OrderService {
         Delivery delivery = new Delivery();
         delivery.setAddress(member.getAddress());
 
+        // 순서: 주문상품 먼저 생성 -> 주문 생성
 
         // 주문 상품 생성 (static 메서드 호출)
         OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), count);
+
+        // 일단 간단하게 주문 상품은 하나의 주문 상품 객체만 주문 객체에 넘기도록 하였음 (서비스 계층에서는)
+        // 물론 Order 엔티티 내에서 설계한 생성메서드는 여러 개의 주문 상품 객체를 받을 수 있도록 설계되어 있음
 
         // 주문 생성 (static 메서드 호출)
         Order order = Order.createOrder(member, delivery, orderItem);
@@ -53,14 +60,15 @@ public class OrderService {
         return order.getId();
     }
 
+    // 주문 취소하기
+    @Transactional
+    public void cancelOrder(Long orderId) {
+        // 주문 엔티티 가져오기
+        Order order = orderRepository.findOne(orderId);
+        // 주문 취소
+        order.cancel();
+        // jpa의 강점: update 쿼리를 따로 날릴 필요없이 jpa가 비즈니스 로직에 따라서 데이터베이스를 다 업데이트 해준다.
+    }
 
-    // 취소
-
-
-    // 검색
-
-
-
-
-
+    // 주문 검색하기
 }
