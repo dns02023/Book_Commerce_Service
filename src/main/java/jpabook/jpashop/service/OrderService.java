@@ -71,4 +71,6 @@ public class OrderService {
     }
 
     // 주문 검색하기
+    // 동적 쿼리
+
 }
