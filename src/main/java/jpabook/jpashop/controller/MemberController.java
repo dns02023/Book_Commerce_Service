@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -46,6 +47,15 @@ public class MemberController {
         // home으로 리다이렉트
         return "redirect:/";
 
+    }
+
+    @GetMapping("/members")
+    public String list(Model model) {
+        // 여기서는 괜찮지만, 만약 API를 개발한다면, 아래와 같이 엔티티를 넘겨주면 안된다.
+        // API의 스펙에 혼란을 줄 수 있다. (엔티티 속성을 수정할 때)
+        List<Member> members = memberService.findMembers();
+        model.addAttribute("members", members);
+        return "members/memberList";
     }
     
 }
