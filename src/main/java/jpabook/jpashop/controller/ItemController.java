@@ -76,18 +76,30 @@ public class ItemController {
     @PostMapping("items/{itemId}/edit")
     public String updateItem(@PathVariable("itemId") Long itemId, @ModelAttribute("form") BookForm form) {
 
-        Book book = new Book();
-        book.setId(form.getId());
-        book.setName(form.getName());
-        book.setPrice(form.getPrice());
-        book.setStockQuantity(form.getStockQuantity());
-        book.setAuthor(form.getAuthor());
-        book.setIsbn(form.getIsbn());
+//        Book book = new Book();
+//        book.setId(form.getId());
+//        book.setName(form.getName());
+//        book.setPrice(form.getPrice());
+//        book.setStockQuantity(form.getStockQuantity());
+//        book.setAuthor(form.getAuthor());
+//        book.setIsbn(form.getIsbn());
+
+//        itemService.saveItem(book);
 
         // itemService save 호출 => itemRepository save 호출
         // itemRepository의 save에서 인자로 들어온 item 엔티티의 id 값이 null이 아니라면,
         // 새로운 엔티티가 아니라 이미 DB에 저장되어 id를 부여받은 엔티티  => 수정을 의미하므로, merge 수행
-        itemService.saveItem(book);
+
+        // 위의 book과 같이 한번 DB에 저장되어서 id값이 부여되었던 엔티티를 준영속 상태 객체라고 한다.
+        // 영속 상태 엔티티는 jpa가 변경 감지를 하면서 수정이 가능하지만, 준영속 상태 엔티티는 영속 엔티티 처럼 수정을 해도 DB에 수정이 되지 않는다.
+        // 그래서 준영속 상태 엔티티를 수정하는 2가지 방법을 사용하여야 함. 그 중 하나가 위와 같이 merge인 것
+
+        // merge를 사용할 때 위험한 점은 어떤 속성에 대해서 수정에 제약을 거는 로직을 구현할 때임
+        // 즉, 위 setter들 중에서 수정이 제약된 속성의 setter를 생략하면, 원래 의도대로 그 속성을 수정 안하는 것이 아니라, 그 속성이 null로 수정되버린다.
+        // => 즉, 변경감지처럼 하는 기법을 통해서 수정을 허용할 속성들에 대해서만 set을 해야 한다. => merge는 쓰지 말자.
+
+        // 또한 위와 같이 어설프게 엔티티를 만들지 말자. 서비스에서 정의해둔 영속 상태 엔티티 변경 감지 수정 메서드를 사용하자.
+        itemService.updateItem(itemId, form.getName(), form.getPrice(), form.getStockQuantity());
         return "redirect:/items";
 
 
