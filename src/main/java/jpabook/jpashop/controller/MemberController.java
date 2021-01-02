@@ -18,6 +18,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    // 기본적인 흐름: get 방식으로 폼을 가져와서 띄워주고, submit을 누르면 => post 방식으로 넘어가서 비즈니스 로직 수행 후 redirect
 
     @GetMapping("/members/new")
     public String createForm(Model model) {

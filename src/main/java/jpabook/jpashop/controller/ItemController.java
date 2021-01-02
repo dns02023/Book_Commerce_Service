@@ -26,6 +26,8 @@ public class ItemController {
         return "items/createItemForm";
     }
 
+    // get => submit => post
+
     // items/new의 post 방식: 생성 로직 수행 후 return => 홈으로 redirect
     @PostMapping("/items/new")
     public String create(BookForm form) {
