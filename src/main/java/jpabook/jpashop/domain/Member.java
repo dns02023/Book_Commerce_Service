@@ -2,6 +2,7 @@ package jpabook.jpashop.domain;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,6 +30,7 @@ public class Member {
     // 연관관계의 주인은 order이다. => 즉, order 테이블에 있는 member 필드에 의해 매핑된다는 것을 의미
     // mappedBy 이므로, 연관관계의 주인이 아니라 거울임을 의미
     // 즉 이 필드에 값을 추가해도 order의 외래키 값이 변경되지 않는다.
+    @JsonIgnore // Json으로 응답할 때 해당 속성을 제외하고 응답한다.
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
     // 리스트형 같이 컬렉션 필드값들은 어떻게 정의해야할까?
