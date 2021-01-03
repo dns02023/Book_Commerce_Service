@@ -86,8 +86,12 @@ public class MemberService {
     }
 
 
-
-
-
-
+    // 수정같은 경우 굳이 수정된 Member 엔티티를 반환하지 않도록 한다. void로 마무리
+    // 커맨드(update)와 쿼리(id로 엔티티 조회)를 분리??
+    @Transactional
+    public void update(Long id, String name) {
+        Member member = memberRepository.findOne(id);
+        // 트랜잭션 내에서 수행되므로 영속 상태 엔티티로 받음 => 변경 감지
+        member.setName(name);
+    }
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +17,9 @@ public class Member {
     @Id @GeneratedValue
     @Column(name = "member_id")
     private Long id;
-    //칼럼명은 member_id로 설정정
+    //칼럼명은 member_id로 설정
 
-   private String name;
+    private String name;
 
     //내장 타입을 포함하였다.
     @Embedded
